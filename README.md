@@ -1,3 +1,5 @@
 # JUNE
 
-# A Finite Volume Solver For Computational Fluid Dynamics
+# A Finite Volume Solver
+
+# Computational Fluid Dynamics
