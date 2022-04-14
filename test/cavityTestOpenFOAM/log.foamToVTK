@@ -1,0 +1,78 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 9
+Exec   : foamToVTK
+Date   : Mar 04 2022
+Time   : 15:58:52
+Host   : "LAPTOP-FT93SQ9U"
+PID    : 8388
+I/O    : uncollated
+Case   : /home/lihuiji/FVM/test/cavityTestOpenFOAM
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Deleting old VTK files in "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK"
+
+Time: 0
+    volScalarFields            : p
+    volVectorFields            : U
+
+    Internal  : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/cavityTestOpenFOAM_0.vtk"
+    Original cells:8000 points:9261   Additional cells:0  additional points:0
+
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/top/top_0.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/others/others_0.vtk"
+Time: 0.01
+    volScalarFields            : p
+    volVectorFields            : U
+
+    Internal  : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/cavityTestOpenFOAM_20.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/top/top_20.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/others/others_20.vtk"
+    surfScalarFields  : phi
+Time: 0.02
+    volScalarFields            : p
+    volVectorFields            : U
+
+    Internal  : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/cavityTestOpenFOAM_40.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/top/top_40.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/others/others_40.vtk"
+    surfScalarFields  : phi
+Time: 0.03
+    volScalarFields            : p
+    volVectorFields            : U
+
+    Internal  : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/cavityTestOpenFOAM_60.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/top/top_60.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/others/others_60.vtk"
+    surfScalarFields  : phi
+Time: 0.04
+    volScalarFields            : p
+    volVectorFields            : U
+
+    Internal  : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/cavityTestOpenFOAM_80.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/top/top_80.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/others/others_80.vtk"
+    surfScalarFields  : phi
+Time: 0.05
+    volScalarFields            : p
+    volVectorFields            : U
+
+    Internal  : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/cavityTestOpenFOAM_100.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/top/top_100.vtk"
+    Patch     : "/home/lihuiji/FVM/test/cavityTestOpenFOAM/VTK/others/others_100.vtk"
+    surfScalarFields  : phi
+End
+
