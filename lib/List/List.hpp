@@ -21,8 +21,9 @@ class List{
         List(size_t size_, T* arr_);
         List(List<T> & list_);
         List(const List<T> & list_);
-        ~List();
+        virtual ~List();
         void resize(unsigned newSize);
+        int lookUp(T targetValue) const;
         int lookUp(T targetValue);
         virtual std::string type() const;
         size_t size() const;
@@ -30,7 +31,6 @@ class List{
         virtual List<T>& operator = (const List<T> &rhs);
         bool operator== (const List<T> &rhs);
         bool operator!= (const List<T> &rhs);
-        friend std::ostream& operator<< <>(std::ostream& os, const List<T> & list);
         friend std::ostream& operator<< <>(std::ostream& os, const List<T> & list);
 };
 

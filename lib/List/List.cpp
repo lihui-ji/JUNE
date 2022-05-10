@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include "List.hpp"
 #include "Vector.hpp"
+#include "Matrix.hpp"
 //constructor
 
 template <class T> 
@@ -57,6 +58,16 @@ void List <T> :: resize (unsigned newSize){
 }
 
 // find first apperance index of value in list
+template <class T> 
+int List <T> :: lookUp(T targetValue) const{
+    for (size_t ind = 0; ind < listSize; ind++){
+        if (arr[ind] == targetValue){
+            return (int)ind;
+        }
+    }
+    return -1;
+}
+
 template <class T> 
 int List <T> :: lookUp(T targetValue){
     for (size_t ind = 0; ind < listSize; ind++){
@@ -148,6 +159,10 @@ template class List < std::string >;
 template std::ostream & operator << (std::ostream&, const List < std::string > &);
 template class List < Vector <double> >;
 template std::ostream & operator << (std::ostream&, const List < Vector <double> > &);
+template class List < Matrix <double> >;
+template std::ostream & operator << (std::ostream&, const List < Matrix <double> > &);
+template class List < Matrix < Vector<double> > >;
+template std::ostream & operator << (std::ostream&, const List < Matrix < Vector<double> > > &);
 
 template class List < List < unsigned > >;
 template std::ostream & operator << (std::ostream&, const List < List < unsigned > > &);
@@ -159,3 +174,10 @@ template class List < List < std::string > >;
 template std::ostream & operator << (std::ostream&, const List < List < std::string > > &);
 template class List < List < int > >;
 template std::ostream & operator << (std::ostream&, const List < List < int > > &);
+
+template class List < List < Vector <double> > >;
+template std::ostream & operator << (std::ostream&, const List < List < Vector <double> > > &);
+template class List <Vector <Vector <double> > >;
+template std::ostream & operator << (std::ostream&, const List <Vector <Vector <double> > > &);
+template class List < List < Vector <unsigned> > >;
+template std::ostream & operator << (std::ostream&, const List < List < Vector <unsigned> > > &);

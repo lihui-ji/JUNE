@@ -2,6 +2,9 @@
 #include <stdexcept>
 
 template <class T>
+Matrix <T> :: Matrix() : Matrix(0,0){}
+
+template <class T>
 Matrix <T> :: Matrix(size_t length_, size_t width_) : List <List <T> > (length_){
     matrixLength = length_;
     matrixWidth = width_;    
@@ -20,6 +23,15 @@ Matrix <T> ::  Matrix(size_t length_, size_t width_, T** arr_) :  Matrix (length
 }
 
 template <class T>
+Matrix<T> :: Matrix(Vector <Vector <T> > vecVec_) : Matrix (vecVec_.size(), vecVec_[0].size() ){
+    for (size_t indLength = 0; indLength < length(); indLength++){
+        for (size_t indWidth = 0; indWidth < width(); indWidth++){
+            (*this)[indLength][indWidth] = vecVec_[indLength][indWidth];
+        }
+    }  
+}
+
+template <class T>
 Matrix<T> :: Matrix(List <List <T> > listList_) : List <List <T> > (listList_){
     matrixLength = listList_.size();
     matrixWidth = listList_[0].size();
@@ -30,13 +42,29 @@ Matrix<T> :: Matrix(List <List <T> > listList_) : List <List <T> > (listList_){
     }
 }
 
+
 template <class T>
 Matrix <T> ::  Matrix(Matrix<T> & Matrix_) :  Matrix (Matrix_.length(), Matrix_.width()){
-    for (size_t indLength = 0; indLength < matrixWidth; indLength++){
+    for (size_t indLength = 0; indLength < matrixLength; indLength++){
         for (size_t indWidth = 0; indWidth < matrixWidth; indWidth++){
             (*this)[indLength][indWidth] = Matrix_[indLength][indWidth];
         }
     }    
+}
+
+// resize matrix
+template <class T> 
+void Matrix <T> :: reshape (size_t length_, size_t width_){
+    (*this).matrixLength = length_;
+    (*this).matrixWidth = width_;
+    if ((*this).size() != length_){
+        (*this).resize(length_);
+    } 
+    for (size_t ind = 0; ind < (*this).size(); ind++){
+        if ((*this)[ind].size() != width_){
+            (*this)[ind].resize(width_);
+        }
+    }
 }
 
 template <class T>
@@ -47,6 +75,15 @@ void Matrix <T> :: setIdentity(){
     for (size_t indLength = 0; indLength < matrixWidth; indLength++){
         for (size_t indWidth = 0; indWidth < matrixWidth; indWidth++){
             (*this)[indLength][indWidth] = (indLength == indWidth? 1 : 0);
+        }
+    }   
+}
+
+template <class T>
+void Matrix <T> :: fill(T value){
+    for (size_t indLength = 0; indLength < matrixLength; indLength++){
+        for (size_t indWidth = 0; indWidth < matrixWidth; indWidth++){
+            (*this)[indLength][indWidth] = value;
         }
     }   
 }
@@ -66,6 +103,7 @@ template <class T>
 bool Matrix <T> :: ifClose (T a, T b) const{
     return ( (a-b) < 0.000001 && (a-b) > -0.000001 );
 }
+
 template <class T>
 void Matrix <T> :: swap (size_t row1, size_t row2){
     if (row1 >= matrixLength || row1 < 0 || row2 >= matrixLength || row2 < 0){
@@ -102,12 +140,12 @@ bool Matrix <T> :: ifIdentity() const{
         for (size_t indWidth = 0; indWidth < matrixWidth; indWidth++){
             T currValue =  (*this)[indLength][indWidth];
             if (indLength == indWidth){
-                if (!ifClose(currValue,1)){
+                if (!ifClose(currValue-1.0, currValue*0.0)){
                     return false;
                 }
             }
             else{
-                if (!ifClose(currValue,0)){
+                if (!ifClose(currValue, currValue*0.0)){
                     return false;
                 }                
             }
@@ -149,9 +187,19 @@ double Matrix <T> :: det() const{
     for (unsigned ind4 = 0; ind4 < matrixLength; ind4++){
         ans *= toolMatrix[ind4][ind4];
     }
-    return ans;
+    return sqrt(ans);
 }
 
+template <class T>
+double Matrix <T> :: norm() const{
+    double ans = 0;
+    for (unsigned indLength = 0; indLength < length(); indLength++){
+        for (unsigned indWidth = 0; indWidth < width(); indWidth++){
+            ans += ((*this)[indLength][indWidth] * (*this)[indLength][indWidth]);
+        }
+    }
+    return sqrt(ans);
+}
 
 template <class T>
 Vector<T> Matrix <T> :: row(size_t rowInd_) const{
@@ -212,15 +260,8 @@ Matrix<double> Matrix <T> :: inverse() const{
 //assignment operator
 template <class T> 
 Matrix<T> & Matrix <T> :: operator= (const Matrix<T> &rhs){
-    (*this).matrixLength = rhs.length();
-    (*this).matrixWidth = rhs.width();
-    if ((*this).size() != rhs.size()){
-        (*this).resize(rhs.size());
-    }  
+    (*this).reshape(rhs.length(), rhs.width());
     for (size_t ind = 0; ind < (*this).size(); ind++){
-        if ((*this)[ind].size() != rhs[ind].size()){
-            (*this)[ind].resize(rhs[ind].size());
-        }
         (*this)[ind] = rhs[ind];
     }
     return *this;
@@ -242,6 +283,21 @@ Matrix<T> operator+(const Matrix<T>& lhs, const Matrix<T>& rhs){
     return ans;
 }
 
+// + Vector to each colomn
+template <class T>
+Matrix<T> operator+(const Matrix<T>& lhs, const Vector<T>& rhs){
+    if (lhs.length() != rhs.size()){
+        throw std::invalid_argument("Size mismatch.");
+    }  
+    Matrix<T> ans(lhs.length(), lhs.width());
+    for (size_t indLength = 0; indLength < lhs.length(); indLength++){
+        for (size_t indWidth = 0; indWidth < lhs.width(); indWidth++){
+            ans[indLength][indWidth] = lhs[indLength][indWidth] + rhs[indWidth];
+        }
+    }    
+    return ans;
+}
+
 // element wise -
 template <class T>
 Matrix<T> operator-(const Matrix<T>& lhs, const Matrix<T>& rhs){
@@ -257,7 +313,7 @@ Matrix<T> operator-(const Matrix<T>& lhs, const Matrix<T>& rhs){
     return ans;
 }
 
-// element wise *
+// inner product*
 template <class T>
 double operator*(const Matrix<T>& lhs, const Matrix<T>& rhs){
     if (lhs.length() != rhs.length() || lhs.width() != rhs.width()){
@@ -272,9 +328,21 @@ double operator*(const Matrix<T>& lhs, const Matrix<T>& rhs){
     return ans;
 }
 
+// multiply a value *
+template <class T>
+Matrix<T> operator*(const Matrix<T>& lhs, const double& rhs){
+    Matrix<T> ans(lhs.length(), lhs.width());
+    for (size_t indLength = 0; indLength < lhs.length(); indLength++){
+        for (size_t indWidth = 0; indWidth < lhs.width(); indWidth++){
+            ans[indLength][indWidth] = lhs[indLength][indWidth] * rhs;
+        }
+    }    
+    return ans;
+}
+
 // standard matrix multiplication &
 template <class T>
-Matrix<T> operator & (const Matrix<T>& lhs, const Matrix<T>& rhs){
+Matrix<T> operator & (const Matrix<T>& lhs, const Matrix<double>& rhs){
     if (lhs.width() != rhs.length()){
         throw std::invalid_argument("Size mismatch.");
     }  
@@ -298,23 +366,27 @@ std::ostream & operator<<(std::ostream& os, const Matrix<T> & matrix){
                 os << " ";
             }            
         }
-        if (indLength != matrix.length()-1){
-            os << std::endl;    
-        }
+        os << std::endl; 
     }   
     return os;
 }
 
 template class Matrix < double >;
 template Matrix<double> operator+ (const Matrix<double>&, const Matrix<double>&);
+template Matrix<double> operator+ (const Matrix<double>&, const Vector<double>&);
 template Matrix<double> operator- (const Matrix<double>&, const Matrix<double>&);
 template double operator* (const Matrix<double>&, const Matrix<double>&);
+template Matrix <double> operator* (const Matrix<double>&, const double&);
 template Matrix<double> operator& (const Matrix<double>&, const Matrix<double>&);
 template std::ostream & operator << (std::ostream&, const Matrix < double > &);
 
 template class Matrix < unsigned >;
-template Matrix<unsigned> operator+ (const Matrix<unsigned>&, const Matrix<unsigned>&);
-template Matrix<unsigned> operator- (const Matrix<unsigned>&, const Matrix<unsigned>&);
-template double operator* (const Matrix<unsigned>&, const Matrix<unsigned>&);
-template Matrix<unsigned> operator& (const Matrix<unsigned>&, const Matrix<unsigned>&);
 template std::ostream & operator << (std::ostream&, const Matrix < unsigned > &);
+
+template class Matrix < Vector <double> >;
+template Matrix<Vector <double> > operator+ (const Matrix<Vector <double>>&, const Matrix<Vector <double>>&);
+template Matrix<Vector <double> > operator+ (const Matrix<Vector <double>>&, const Vector<Vector <double>>&);
+template Matrix<Vector <double> > operator- (const Matrix<Vector <double>>&, const Matrix<Vector <double>>&);
+template Matrix <Vector <double> > operator* (const Matrix<Vector <double> >&, const double&);
+template Matrix <Vector <double> > operator& (const Matrix<Vector <double> >&, const Matrix<double> &);
+template std::ostream & operator << (std::ostream&, const Matrix < Vector <double> > &);

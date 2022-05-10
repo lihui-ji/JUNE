@@ -29,7 +29,7 @@ Vector <T> :: Vector(T x, T y, T z): List<T>(3){
 }
 
 template <class T>
-Vector <T> :: Vector(List<T> &startPoint, List<T> &endPoint): List<T>(3){
+Vector <T> :: Vector(List<T> startPoint, List<T> endPoint): List<T>(3){
     (*this)[0] = endPoint[0] - startPoint[0];
     (*this)[1] = endPoint[1] - startPoint[1];
     (*this)[2] = endPoint[2] - startPoint[2];
@@ -111,6 +111,16 @@ List <T> Vector <T> :: toList() const{
 }
 
 template <class T>
+Vector <T> :: operator double()
+{
+    Vector <double> ans ((*this).size());
+    for (size_t ind = 0; ind < (*this).size(); ind++){
+        ans [ind] = double((*this)[ind]);
+    }    
+    return ans;
+}
+
+template <class T>
 std::ostream& operator << (std::ostream& os, const Vector <T> & vector)
 {
      os << static_cast <const List<T>&> (vector);  
@@ -183,20 +193,20 @@ Vector <T> operator-(T lhs, const Vector <T> & rhs){
 
 // inner (dot) product *
 template <class T>
-T operator*(const Vector <T> & lhs, const Vector <T> & rhs){
+T operator*(const Vector <T> & lhs, const Vector <double> & rhs){
     if (lhs.size() != rhs.size()){
         throw std::invalid_argument("Size mismatch in T operator*(const Vector <T> & lhs, const Vector <T> & rhs).");
     }  
-    T ans = 0;
+    T ans = lhs[0] * 0.0;
     for (size_t  ind = 0; ind < lhs.size(); ind++){
-        ans += lhs[ind] * rhs[ind];
+        ans = ans + lhs[ind] * rhs[ind];
     }     
     return ans;
 }
 
 // multiply a value *
 template <class T>
-Vector <T> operator*(const Vector <T> & lhs, T rhs){
+Vector <T> operator*(const Vector <T> & lhs, double rhs){
     Vector <T> ans (lhs.size());
     for (size_t  ind = 0; ind < lhs.size(); ind++){
         ans [ind] = lhs[ind] * rhs;
@@ -206,13 +216,13 @@ Vector <T> operator*(const Vector <T> & lhs, T rhs){
 
 // multiply a value *
 template <class T>
-Vector <T> operator*(T lhs, const Vector <T> & rhs){
+Vector <T> operator*(double lhs, const Vector <T> & rhs){
     return rhs * lhs;
 }
 
 // divided by a value /
 template <class T>
-Vector <T> operator/(const Vector <T> & lhs, T rhs){
+Vector <T> operator/(const Vector <T> & lhs, double rhs){
     Vector <T> ans (lhs.size());
     for (size_t  ind = 0; ind < lhs.size(); ind++){
         ans [ind] = lhs[ind] / rhs;
@@ -233,6 +243,27 @@ Vector <T> operator&(const Vector <T> & lhs, const Vector <T> & rhs){
     return ans;
 }
 
+template <class T>
+bool Vector <T> :: operator< (const double& rhs){
+    for (size_t  ind = 0; ind < this -> size(); ind++){
+        if ((*this)[ind] > rhs){
+            return false;
+        }
+    } 
+    return true;
+}
+
+template <class T>
+bool Vector <T> :: operator> (const double& rhs){
+    for (size_t  ind = 0; ind < this -> size(); ind++){
+        if ((*this)[ind] < rhs){
+            return false;
+        }
+    } 
+    return true;
+}
+
+
 template class Vector < double >;
 template Vector < double > operator + (const Vector < double > &, const Vector < double > &);
 template Vector <double> operator + (const Vector < double > &, double);
@@ -247,19 +278,13 @@ template Vector <double> operator / (const Vector < double > &, double);
 template Vector < double > operator & (const Vector < double > &, const Vector < double > &);
 template std::ostream & operator << (std::ostream &, const Vector < double > &);
 
-template class Vector < bool >;
-template std::ostream & operator << (std::ostream &, const Vector < bool > &);
-
 template class Vector < unsigned >;
-template Vector < unsigned > operator + (const Vector < unsigned > &, const Vector < unsigned > &);
-template Vector < unsigned > operator + (const Vector < unsigned > &, unsigned);
-template Vector < unsigned > operator + (unsigned, const Vector < unsigned > &);
-template Vector < unsigned > operator - (const Vector < unsigned > &, const Vector < unsigned > &);
-template Vector < unsigned > operator - (const Vector < unsigned > &, unsigned);
-template Vector < unsigned > operator - (unsigned, const Vector < unsigned > &);
-template unsigned operator * (const Vector < unsigned > &, const Vector < unsigned > &);
-template Vector < unsigned > operator * (const Vector < unsigned > &, unsigned);
-template Vector < unsigned > operator * (unsigned, const Vector < unsigned > &);
-template Vector < unsigned > operator / (const Vector < unsigned > &, unsigned);
-template Vector < unsigned > operator & (const Vector < unsigned > &, const Vector < unsigned > &);
 template std::ostream & operator << (std::ostream&, const Vector < unsigned > &);
+
+template class Vector < Vector <double> >;
+template Vector < Vector <double> > operator + (const Vector < Vector <double> > &, const Vector < Vector <double> > &);
+template Vector < Vector <double> > operator - (const Vector < Vector <double> > &, const Vector < Vector <double> > &);
+template Vector < Vector <double> > operator * (const Vector < Vector <double> > & lhs, double rhs);
+template Vector < Vector <double> > operator * (double lhs, const Vector < Vector <double> > & rhs);
+template Vector <double> operator * (const Vector < Vector <double> > &, const Vector <double> &);
+template std::ostream & operator << (std::ostream&, const Vector < Vector <double> > &);
