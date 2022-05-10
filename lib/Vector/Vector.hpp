@@ -28,16 +28,16 @@ template<class T> // declaration
 Vector <T> operator- (T rhs, const Vector <T> & lhs);
 
 template<class T> // declaration
-T operator* (const Vector <T> & lhs, const Vector <T> & rhs);
+T operator* (const Vector <T> & lhs, const Vector <double> & rhs);
 
 template<class T> // declaration
-Vector <T> operator* (const Vector <T> & lhs, T rhs);
+Vector <T> operator* (const Vector <T> & lhs, double rhs);
 
 template<class T> // declaration
-Vector <T> operator* (T rhs, const Vector <T> & lhs);
+Vector <T> operator* (double rhs, const Vector <T> & lhs);
 
 template<class T> // declaration
-Vector <T> operator/ (const Vector <T> & lhs, T rhs);
+Vector <T> operator/ (const Vector <T> & lhs, double rhs);
 
 template<class T> // declaration
 Vector <T> operator& (const Vector <T> & lhs, const Vector <T> & rhs);
@@ -52,7 +52,7 @@ class Vector : public List<T>{
         Vector(T* arr_);
         Vector(Vector <T> & vector_);
         Vector(T x, T y, T z);
-        Vector(List<T>& startPoint, List<T>& endPoint);
+        Vector(List<T> startPoint, List<T> endPoint);
 
         std::string type() const;
         double norm() const;
@@ -62,13 +62,20 @@ class Vector : public List<T>{
         Vector <double> toDouble () const;
         Vector <unsigned> toUnsigned () const;
         List <T> toList() const;
-
-        friend Vector <T> operator+ <> (const Vector <T> & lhs, const Vector <T> & rhs);
-        friend Vector <T> operator- <> (const Vector <T> & lhs, const Vector <T> & rhs);
-        friend T operator* <> (const Vector <T> & lhs, const Vector <T> & rhs);
-        friend Vector <T> operator* <> (const Vector <T> & lhs, T rhs);
-        friend Vector <T> operator& <> (const Vector <T> & lhs, const Vector <T> & rhs);
-        
+        operator double();
+        bool operator< (const double &rhs);
+        bool operator> (const double &rhs);
+        friend Vector <T> operator+ <>(const Vector <T> & lhs, const Vector <T> & rhs);
+        friend Vector <T> operator+ <>(const Vector <T> & lhs, T rhs);
+        friend Vector <T> operator+ <>(T rhs, const Vector <T> & lhs);
+        friend Vector <T> operator- <>(const Vector <T> & lhs, const Vector <T> & rhs);
+        friend Vector <T> operator- <>(const Vector <T> & lhs, T rhs);
+        friend Vector <T> operator- <>(T rhs, const Vector <T> & lhs);
+        friend T operator* <>(const Vector <T> & lhs, const Vector <double> & rhs);
+        friend Vector <T> operator* <>(const Vector <T> & lhs, double rhs);
+        friend Vector <T> operator* <>(double rhs, const Vector <T> & lhs);
+        friend Vector <T> operator/ <>(const Vector <T> & lhs, double rhs);
+        friend Vector <T> operator& <>(const Vector <T> & lhs, const Vector <T> & rhs);
         friend std::ostream& operator<< <>(std::ostream& os, const Vector <T> & vector);
 };
 #endif /* Vector_H */
